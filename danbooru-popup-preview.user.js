@@ -3,7 +3,7 @@
 // @description Enables pop-up image previews for Danbooru searches.
 // @namespace   http://danbooru.donmai.us/Danbooru-Popup-Preview
 // @match       http://danbooru.donmai.us/*
-// @version     1.2
+// @version     1.3
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @updateURL   https://github.com/Oddegamra/danbooru-userscript/raw/master/danbooru-popup-preview.user.js
@@ -114,6 +114,12 @@ function eachPreview(idx, elem) {
 		);
 }
 
+// Make sure the notice box overlaps the fancybox
+$('#notice').css('z-index', '9000');
+
+// Build preview click boxes
+$('article.post-preview:not(.blacklisted)').each(eachPreview);
+
 // Create fancybox for all image links
 $("a.danbooru-preview").fancybox({
 	beforeShow: onFancyboxShow,
@@ -123,11 +129,5 @@ $("a.danbooru-preview").fancybox({
 		}
 	}
 });
-
-// Make sure the notice box overlaps the fancybox
-$('#notice').css('z-index', '9000');
-
-// Call Danbooru API to get a list of sample URLs for each currently displayed image
-$('article.post-preview').each(eachPreview);
 
 // vim: nowrap
