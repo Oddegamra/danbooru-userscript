@@ -3,9 +3,10 @@
 // @description Enables pop-up image previews for Danbooru searches.
 // @namespace   http://danbooru.donmai.us/Danbooru-Popup-Preview
 // @match       http://danbooru.donmai.us/*
-// @version     1.1
-// @grant		GM_addStyle
+// @version     1.2
+// @grant       GM_addStyle
 // @grant       GM_getResourceText
+// @updateURL   https://github.com/Oddegamra/danbooru-userscript/raw/master/danbooru-popup-preview.user.js
 // @require     http://code.jquery.com/jquery-2.1.0.min.js
 // @require     https://raw.github.com/fancyapps/fancyBox/master/source/jquery.fancybox.pack.js
 // @require     https://raw.github.com/fancyapps/fancyBox/master/lib/jquery.mousewheel.pack.js
@@ -41,14 +42,14 @@ function onFancyboxShow() {
 	var tagString = imageElem.parent().attr('data-tags');
 	var tagsSplit = tagString.split(' ');
 	var titleString = new Array();
+	titleString.push('<span class="danbooru-preview-tags">');
 	for (var i = 0; i < tagsSplit.length; ++i) {
 		titleString.push('<a class="search-tag" href="/posts?tags=' 
 			+ encodeURIComponent(tagsSplit[i])
 			+ '" style="font-size: smaller">' + tagsSplit[i] + '</a>');
 	}
+	titleString.push('</span><br />');
 	
-	titleString.push("<br />");
-
 	// Create various links for voting, favoriting and downloading
 	var imageId = imageElem.parent().attr('data-id');
 	titleString.push('<span style="font-size: smaller">Vote:');
@@ -67,6 +68,8 @@ function onFancyboxShow() {
 	titleString.push('</span>');
 
 	this.title = titleString.join(' ');
+	$('img.fancybox-image').wrap('<a href="/posts/' +
+		imageId + window.location.search + '">');
 }
 
 
